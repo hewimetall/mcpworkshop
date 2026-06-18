@@ -15,10 +15,10 @@ FROM debian:bookworm-slim
 
 RUN apt-get update \
  && apt-get install -y --no-install-recommends \
-      ca-certificates curl git nodejs npm \
- && npm install -g \
+      ca-certificates curl git nodejs npm 
+RUN npm install -g \
       pyright \
-      vscode-css-language-server vscode-html-language-server\
+      vscode-html-language-server \
       typescript-language-server typescript \
       vscode-langservers-extracted \
       dockerfile-language-server-nodejs \

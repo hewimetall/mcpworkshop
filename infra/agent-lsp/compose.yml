@@ -1,14 +1,10 @@
 services:
   agent-lsp:
-    build:
-      context: ./docker/agent-lsp
-      dockerfile: Dockerfile
-    image: s3ctl-agent-lsp:local
+    image: netro66/s3ctl-agent-lsp:local
     ports:
       - "8888:8888"               # <-- добавьте эту строку
     volumes:
-      - /home/x/mirror:/mirror:rw
-      - /home/x/runity/s3ctl:/workspace:rw
+      - ./mirror:/mirror:rw
       - lsp-server-cache:/var/cache/lsp-servers
     working_dir: /workspace
     environment:
