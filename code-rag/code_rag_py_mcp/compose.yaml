@@ -1,0 +1,45 @@
+services:
+  code-rag-mcp:
+    build: .
+    container_name: code-rag-py-mcp
+    environment:
+      DATABASE_URL: ${DATABASE_URL:-postgresql://ruvector:ruvector@postgres:5432/ruvector}
+      RUVECTOR_EMBED_MODEL: ${RUVECTOR_EMBED_MODEL:-all-MiniLM-L6-v2}
+      CODE_RAG_NS: ${CODE_RAG_NS:-}
+      MCP_TRANSPORT: http
+      MCP_HOST: 0.0.0.0
+      MCP_PORT: "4444"
+      MCP_PATH: /mcp
+    ports:
+      - "${MCP_PORT:-4444}:4444"
+
+  # Optional local PostgreSQL (RuVector image must provide extension + functions)
+  postgres:
+    image: ruvnet/ruvector-postgres:latest
+    container_name: code-rag-postgres
+    environment:
+      POSTGRES_USER: ruvector
+      POSTGRES_PASSWORD: ruvector
+      POSTGRES_DB: ruvector
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    profiles:
+      - local-db
+
+  migrate:
+    build: .
+    container_name: code-rag-migrate
+    environment:
+      DATABASE_URL: ${DATABASE_URL:-postgresql://ruvector:ruvector@postgres:5432/ruvector}
+    command: ["alembic", "upgrade", "head"]
+    depends_on:
+      postgres:
+        condition: service_started
+        required: false
+    profiles:
+      - local-db
+
+volumes:
+  pgdata:

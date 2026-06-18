@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  mcp:
+    image: structurizr/mcp:latest
+    container_name: structurizr-mcp
+    ports:
+      - "0.0.0.0:3000:3000"
+    environment:
+      - PORT=3000
+      - JAVA_OPTS=-Dstructurizr.feature.dsl.decisions=true
+    volumes:
+      - ./workspace:/usr/local/structurizr
+    command: >
+      -dsl
+      -plantuml
+      -server-create
+      -server-read
+      -server-update
+      -server-delete
+
+  local:
+    image: netro66/structurizr         # ваш собранный образ
+    container_name: structurizr-local
+    ports:
+      - "0.0.0.0:9080:8080"
+    environment:
+      - JAVA_OPTS=-Dstructurizr.feature.dsl.decisions=true
+    volumes:
+      - ./workspace:/usr/local/structurizr
+    # Важно: правильно разбить команду на аргументы (массив)
+    command:
+      - "java"
+      - "-Dstructurizr.feature.dsl.decisions=true"
+      - "-jar"
+      - "/usr/local/structurizr.war"
+      - "server"
