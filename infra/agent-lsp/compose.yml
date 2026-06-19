@@ -5,7 +5,7 @@ services:
     ports:
       - "8888:8888"
     volumes:
-      - ./project:${PWD}/project:ro
+      - ${HOME}:${HOME}
       - lsp-server-cache:/var/cache/lsp-servers
     working_dir: /workspace
     environment:
