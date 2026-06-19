@@ -18,7 +18,6 @@ RUN apt-get update \
       ca-certificates curl git nodejs npm 
 RUN npm install -g \
       pyright \
-      vscode-html-language-server \
       typescript-language-server typescript \
       vscode-langservers-extracted \
       dockerfile-language-server-nodejs \
